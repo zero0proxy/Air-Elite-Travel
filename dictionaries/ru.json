@@ -1,1 +1,9 @@
-{}
+{
+  "navigation": {
+    "tours": "Туры",
+    "cars": "Аренда авто",
+    "transfers": "Трансферы",
+    "promotions": "Акции",
+    "vacancies": "Вакансии"
+  }
+}
