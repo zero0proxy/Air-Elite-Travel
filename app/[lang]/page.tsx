@@ -25,6 +25,9 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           Язык системы: <span className="font-semibold uppercase">{lang}</span>
         </p>
       </div>
+{/* Выводим акции, передавая текущий язык */}
+      <PromoFeed lang={lang} />
+      
     </main>
   );
 }
