@@ -1,1 +1,9 @@
-{}
+{
+  "navigation": {
+    "tours": "Tours",
+    "cars": "Car Rental",
+    "transfers": "Transfers",
+    "promotions": "Promotions",
+    "vacancies": "Careers"
+  }
+}
