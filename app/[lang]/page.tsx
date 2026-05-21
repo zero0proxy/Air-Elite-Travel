@@ -1,4 +1,5 @@
 import { getDictionary, Locale } from "../../dictionaries/getDictionary";
+import PromoFeed from "../components/PromoFeed"; // <-- Эту строку нужно добавить!
 
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
   const resolvedParams = await params;
