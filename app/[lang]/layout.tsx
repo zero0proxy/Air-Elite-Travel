@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Locale } from "../../dictionaries/getDictionary";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 import "../globals.css";
 
 // Фиксируем масштаб для мобильных устройств, чтобы интерфейс не ломался при зуме

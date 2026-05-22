@@ -5,5 +5,9 @@
     "transfers": "Трансферы",
     "promotions": "Акции",
     "vacancies": "Вакансии"
+  },
+  "footer": {
+    "contacts": "Контакты",
+    "rights": "Все права защищены."
   }
 }
