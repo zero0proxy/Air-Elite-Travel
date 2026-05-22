@@ -1,10 +1,8 @@
 import { supabase } from '../../../lib/supabase'
 import { getDictionary, Locale } from '../../../dictionaries/getDictionary'
 
-// Отключаем кэширование, чтобы всегда видеть актуальные туры из базы
 export const dynamic = 'force-dynamic';
 
-// Описываем структуру тура
 type Tour = {
   id: string
   price: number
@@ -17,16 +15,15 @@ type Tour = {
   description_en: string | null
   description_ka: string | null
   description_uz: string | null
+  image_url: string | null // <-- Добавили поле
 }
 
 export default async function ToursPage({ params }: { params: Promise<{ lang: string }> }) {
   const resolvedParams = await params;
   const lang = resolvedParams.lang as Locale;
   
-  // Загружаем словарь, чтобы перевести статический текст (например, заголовок страницы)
   const dict = await getDictionary(lang);
 
-  // Получаем туры из базы
   const { data: tours, error } = await supabase
     .from('tours')
     .select('*')
@@ -38,41 +35,57 @@ export default async function ToursPage({ params }: { params: Promise<{ lang: st
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 py-12 px-4">
+    <main className="min-h-screen bg-gray-50 py-16 px-4">
       <div className="max-w-6xl mx-auto">
         
-        {/* Шапка страницы с кнопкой "Назад" */}
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900">{dict.navigation?.tours}</h1>
+        <div className="flex justify-between items-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 tracking-tight">{dict.navigation?.tours}</h1>
           <a href={`/${lang}`} className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
             ← Назад на главную
           </a>
         </div>
 
-        {/* Вывод сетки туров */}
         {!tours || tours.length === 0 ? (
           <p className="text-xl text-gray-500 text-center">Туров пока нет.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {tours.map((tour: Tour) => {
-              // Выбираем нужный язык (если перевода нет - показываем русский)
-              const title = tour[`title_${lang}` as keyof Tour] || tour.title_ru
+              const title = (tour[`title_${lang}` as keyof Tour] as string) || tour.title_ru
               const description = tour[`description_${lang}` as keyof Tour] || tour.description_ru
 
               return (
-                <div key={tour.id} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{title}</h3>
-                  <p className="text-gray-600 mb-6 flex-grow">{description}</p>
+                <div key={tour.id} className="bg-white rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300 flex flex-col group">
                   
-                  {/* Подвал карточки с ценой и длительностью */}
-                  <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
-                    <div className="text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-lg">
-                      ⏱ {tour.duration_days} дн.
-                    </div>
-                    <div className="text-2xl font-bold text-blue-600">
+                  {/* Изображение тура */}
+                  <div className="h-52 w-full relative overflow-hidden bg-gray-100">
+                    {tour.image_url ? (
+                      <img 
+                        src={tour.image_url} 
+                        alt={title} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400">Нет фото</div>
+                    )}
+                    
+                    {/* Цена поверх фото (Glassmorphism) */}
+                    <div className="absolute bottom-4 right-4 bg-white/80 backdrop-blur-md text-gray-900 font-bold text-lg px-4 py-1.5 rounded-xl shadow-sm">
                       ${tour.price}
                     </div>
                   </div>
+
+                  {/* Контент */}
+                  <div className="p-6 flex flex-col flex-grow">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3 leading-tight">{title}</h3>
+                    <p className="text-gray-600 mb-6 flex-grow text-sm leading-relaxed">{description}</p>
+                    
+                    <div className="mt-auto pt-4 border-t border-gray-100">
+                      <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1.5 rounded-lg">
+                        ⏱ {tour.duration_days} дн.
+                      </span>
+                    </div>
+                  </div>
+
                 </div>
               )
             })}
