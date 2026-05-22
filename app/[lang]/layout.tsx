@@ -1,16 +1,15 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Locale } from "../../dictionaries/getDictionary";
+import Header from "../components/Header";
 import "../globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// Фиксируем масштаб для мобильных устройств, чтобы интерфейс не ломался при зуме
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export const metadata: Metadata = {
   title: "Air Elite Travel",
@@ -25,11 +24,18 @@ export default async function RootLayout({
   params: Promise<{ lang: string }>;
 }>) {
   const resolvedParams = await params;
+  const lang = resolvedParams.lang as Locale;
   
   return (
-    <html lang={resolvedParams.lang}>
-      <body className="antialiased">
-        {children}
+    <html lang={lang}>
+      <body className="antialiased flex flex-col min-h-screen">
+        {/* Шапка теперь глобальная */}
+        <Header lang={lang} />
+        
+        {/* Основной контент страниц */}
+        <div className="flex-grow">
+          {children}
+        </div>
       </body>
     </html>
   );
