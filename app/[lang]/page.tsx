@@ -1,9 +1,9 @@
 import { Locale } from "../../dictionaries/getDictionary";
-import PromoFeed from "../components/PromoFeed";
 import Hero from "../components/Hero";
 import Features from "../components/Features";
-import Testimonials from "../components/Testimonials";
 import HotCars from "../components/HotCars";
+import PromoFeed from "../components/PromoFeed";
+import Testimonials from "../components/Testimonials";
 
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
   const resolvedParams = await params;
@@ -11,22 +11,22 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
   return (
     <main className="min-h-screen bg-white flex flex-col">
-      {/* Главный экран с видео */}
+      {/* 1. Главный экран (Видео на весь экран) */}
       <Hero lang={lang} />
       
-      {/* Блок преимуществ */}
+      {/* 2. Блок преимуществ (Белый фон) */}
       <Features lang={lang} />
 
-      {/* Новый блок с автомобилями */}
+      {/* 3. Премиум Автопарк (Серый фон, чтобы отбить от белых блоков) */}
       <HotCars lang={lang} />
       
-      {/* Горящие предложения от партнеров */}
-      <div className="py-24 bg-gray-50">
-        <PromoFeed lang={lang} />
-      </div>
+      {/* 4. Акции партнеров (Снова белый фон) */}
+      <PromoFeed lang={lang} />
       
-      {/* Отзывы */}
-      <Testimonials lang={lang} />
+      {/* 5. Отзывы (Серый фон) */}
+      <div className="bg-gray-50">
+        <Testimonials lang={lang} />
+      </div>
     </main>
   );
 }

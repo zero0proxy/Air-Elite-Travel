@@ -18,52 +18,53 @@ type Car = {
 export default async function HotCars({ lang }: { lang: Locale }) {
   const dict = await getDictionary(lang)
 
-  // Берем только 3 автомобиля для витрины главной страницы
+  // Берем до 8 автомобилей для создания плотной витрины
   const { data: cars, error } = await supabase
     .from('cars')
     .select('*')
     .eq('is_active', true)
     .order('created_at', { ascending: false })
-    .limit(3)
+    .limit(8)
 
-  if (error || !cars || cars.length === 0) {
-    return null; // Если авто нет или ошибка, просто не показываем блок
-  }
+  if (error || !cars || cars.length === 0) return null;
 
   return (
-    <section className="py-20 bg-gray-50 border-y border-gray-100">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="flex justify-between items-end mb-12">
+    <section className="py-24 bg-gray-50 border-y border-gray-100">
+      {/* Расширенный контейнер для максимального заполнения экрана */}
+      <div className="max-w-[1400px] mx-auto px-6">
+        
+        <div className="flex justify-between items-end mb-14">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight mb-2">
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter mb-4 uppercase">
               Премиум Автопарк
             </h2>
-            <p className="text-gray-500">Автомобили для любого маршрута</p>
+            <div className="w-24 h-1.5 bg-blue-600 rounded-full"></div>
           </div>
-          <a href={`/${lang}/cars`} className="text-blue-600 hover:text-blue-800 font-bold flex items-center gap-2 transition-colors">
-            Все авто <span>→</span>
+          <a href={`/${lang}/cars`} className="hidden md:flex group text-blue-600 font-bold items-center gap-2 text-lg">
+            Смотреть все <span className="group-hover:translate-x-1 transition-transform">→</span>
           </a>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Плотная сетка: 4 колонки на больших экранах */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {cars.map((car: Car) => {
             const fullName = `${car.brand} ${car.model}`
 
             return (
-              <div key={car.id} className="bg-gray-50 rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300 flex flex-col group">
+              <div key={car.id} className="bg-white rounded-[2rem] overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgb(0,0,0,0.08)] transition-all duration-500 border border-gray-100 group flex flex-col">
                 
                 <a href={`/${lang}/cars`} className="block">
-                  <div className="h-52 w-full relative overflow-hidden bg-gray-200 cursor-pointer">
+                  <div className="h-56 w-full relative overflow-hidden bg-gray-100 cursor-pointer">
                     {car.image_url ? (
                       <img 
                         src={car.image_url} 
                         alt={fullName} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-400">Нет фото</div>
                     )}
-                    <div className="absolute bottom-4 right-4 bg-blue-600/90 backdrop-blur-md text-white font-bold text-sm px-4 py-1.5 rounded-xl shadow-sm">
+                    <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-md text-white font-bold text-sm px-4 py-1.5 rounded-full shadow-sm">
                       ${car.price_per_day} / день
                     </div>
                   </div>
@@ -71,17 +72,17 @@ export default async function HotCars({ lang }: { lang: Locale }) {
 
                 <div className="p-6 flex flex-col flex-grow">
                   <div className="flex justify-between items-baseline mb-4">
-                    <h3 className="text-2xl font-bold text-gray-900">{fullName}</h3>
-                    <span className="text-sm text-gray-400 font-medium">{car.year} г.</span>
+                    <h3 className="text-xl font-bold text-gray-900 line-clamp-1">{fullName}</h3>
+                    <span className="text-sm text-gray-400 font-medium ml-2 shrink-0">{car.year}</span>
                   </div>
                   
-                  <div className="mt-auto pt-4 border-t border-gray-200 flex flex-col gap-3">
+                  <div className="mt-auto pt-4 border-t border-gray-50 flex flex-col gap-3">
                     <div className="flex gap-2">
-                      <span className="text-xs font-semibold text-gray-700 bg-white border border-gray-200 px-3 py-1.5 rounded-lg">
+                      <span className="text-xs font-semibold text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
                         ⚙️ {car.transmission}
                       </span>
-                      <span className="text-xs font-semibold text-gray-700 bg-white border border-gray-200 px-3 py-1.5 rounded-lg">
-                        👤 {car.seats} мест
+                      <span className="text-xs font-semibold text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
+                        👤 {car.seats}
                       </span>
                     </div>
 
@@ -96,6 +97,11 @@ export default async function HotCars({ lang }: { lang: Locale }) {
             )
           })}
         </div>
+        
+        {/* Кнопка "Смотреть все" для мобильных */}
+        <a href={`/${lang}/cars`} className="md:hidden mt-8 flex justify-center w-full bg-blue-50 text-blue-600 font-bold py-4 rounded-2xl">
+          Смотреть все автомобили →
+        </a>
       </div>
     </section>
   )
