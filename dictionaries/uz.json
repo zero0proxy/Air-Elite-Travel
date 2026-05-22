@@ -6,6 +6,11 @@
     "promotions": "Promotions",
     "vacancies": "Careers"
   },
+  "hero": {
+    "title": "Discover Georgia",
+    "subtitle": "Premium tours, car rentals, and comfortable transfers for your perfect vacation",
+    "cta": "Choose a tour"
+  },
   "footer": {
     "contacts": "Contacts",
     "rights": "All rights reserved."
