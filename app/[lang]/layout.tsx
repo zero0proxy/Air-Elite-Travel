@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Locale } from "../../dictionaries/getDictionary";
+import { getDictionary, Locale } from "../../dictionaries/getDictionary";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "../globals.css";
@@ -26,10 +26,13 @@ export default async function RootLayout({
   const resolvedParams = await params;
   const lang = resolvedParams.lang as Locale;
   
+  // Достаем словарь на сервере и передаем в клиентскую шапку
+  const dict = await getDictionary(lang);
+  
   return (
     <html lang={lang}>
       <body className="antialiased flex flex-col min-h-screen">
-        <Header lang={lang} />
+        <Header lang={lang} navDict={dict.navigation} />
         
         <div className="flex-grow">
           {children}

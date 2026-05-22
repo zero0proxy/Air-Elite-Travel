@@ -4,7 +4,7 @@ export default async function Hero({ lang }: { lang: Locale }) {
   const dict = await getDictionary(lang)
   
   return (
-    <section className="relative h-[85vh] min-h-[600px] flex items-center justify-center text-center px-4 overflow-hidden bg-gray-950">
+    <section className="relative h-screen flex items-center justify-center text-center px-4 overflow-hidden bg-gray-950">
       {/* СЛОЙ 1: Видео на самом дне (z-0). Отключаем клики, чтобы не мешать интерфейсу */}
       <video 
         autoPlay 

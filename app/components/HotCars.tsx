@@ -31,7 +31,7 @@ export default async function HotCars({ lang }: { lang: Locale }) {
   }
 
   return (
-    <section className="py-24 bg-white">
+    <section className="py-16 bg-gray-50 border-y border-gray-100">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-end mb-12">
           <div>
