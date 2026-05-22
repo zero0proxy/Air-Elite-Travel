@@ -4,14 +4,20 @@ export default async function Hero({ lang }: { lang: Locale }) {
   const dict = await getDictionary(lang)
   
   return (
-    <section className="relative h-[80vh] min-h-[600px] flex items-center justify-center text-center px-4 overflow-hidden">
-      {/* Фоновое изображение */}
-      <div 
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1565018977111-44752ce818fe?q=80&w=2070&auto=format&fit=crop')" }}
-      ></div>
+    <section className="relative h-[85vh] min-h-[600px] flex items-center justify-center text-center px-4 overflow-hidden">
+      {/* Фоновое видео */}
+      <video 
+        autoPlay 
+        loop 
+        muted 
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      >
+        <source src="hero.mp4" type="video/mp4" />
+        Ваш браузер не поддерживает видео.
+      </video>
       
-      {/* Темный градиент-оверлей */}
+      {/* Темный градиент-оверлей для читаемости текста */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/70 via-black/40 to-gray-50"></div>
       
       {/* Текстовый контент */}
