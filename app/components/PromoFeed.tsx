@@ -36,7 +36,7 @@ export default async function PromoFeed({ lang }: { lang: Locale }) {
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {promotions.map((promo: Promotion) => {
-          const title = promo[`title_${lang}` as keyof Promotion] || promo.title_ru
+          const title = (promo[`title_${lang}` as keyof Promotion] as string) || promo.title_ru
 
           return (
             <div 
