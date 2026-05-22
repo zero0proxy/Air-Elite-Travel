@@ -1,5 +1,6 @@
 import { supabase } from '../../../lib/supabase'
 import { getDictionary, Locale } from '../../../dictionaries/getDictionary'
+import BookingButton from '../../components/BookingButton'
 
 export const dynamic = 'force-dynamic';
 
@@ -15,7 +16,7 @@ type Tour = {
   description_en: string | null
   description_ka: string | null
   description_uz: string | null
-  image_url: string | null // <-- Добавили поле
+  image_url: string | null
 }
 
 export default async function ToursPage({ params }: { params: Promise<{ lang: string }> }) {
@@ -79,10 +80,16 @@ export default async function ToursPage({ params }: { params: Promise<{ lang: st
                     <h3 className="text-2xl font-bold text-gray-900 mb-3 leading-tight">{title}</h3>
                     <p className="text-gray-600 mb-6 flex-grow text-sm leading-relaxed">{description}</p>
                     
-                    <div className="mt-auto pt-4 border-t border-gray-100">
-                      <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1.5 rounded-lg">
+                    {/* Подвал карточки с кнопкой бронирования */}
+                    <div className="mt-auto pt-4 border-t border-gray-100 flex flex-col gap-2">
+                      <div className="inline-block self-start text-xs font-semibold text-gray-500 bg-gray-100 px-3 py-1.5 rounded-lg mb-2">
                         ⏱ {tour.duration_days} дн.
-                      </span>
+                      </div>
+                      
+                      <BookingButton 
+                        serviceType="tour" 
+                        serviceTitle={title} 
+                      />
                     </div>
                   </div>
 
