@@ -1,7 +1,6 @@
 import { supabase } from '../../../lib/supabase'
 import { getDictionary, Locale } from '../../../dictionaries/getDictionary'
 
-// Отключаем кэш, чтобы клиент всегда видел свежие цены и маршруты
 export const dynamic = 'force-dynamic';
 
 type Transfer = {
@@ -17,6 +16,7 @@ type Transfer = {
   description_en: string | null
   description_ka: string | null
   description_uz: string | null
+  image_url: string | null // <-- Наша новая колонка
 }
 
 export default async function TransfersPage({ params }: { params: Promise<{ lang: string }> }) {
@@ -36,11 +36,11 @@ export default async function TransfersPage({ params }: { params: Promise<{ lang
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 py-12 px-4">
+    <main className="min-h-screen bg-gray-50 py-16 px-4">
       <div className="max-w-6xl mx-auto">
         
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900">{dict.navigation?.transfers}</h1>
+        <div className="flex justify-between items-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 tracking-tight">{dict.navigation?.transfers}</h1>
           <a href={`/${lang}`} className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
             ← Назад на главную
           </a>
@@ -49,34 +49,48 @@ export default async function TransfersPage({ params }: { params: Promise<{ lang
         {!transfers || transfers.length === 0 ? (
           <p className="text-xl text-gray-500 text-center">Трансферов пока нет.</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {transfers.map((transfer: Transfer) => {
-              const route = transfer[`route_${lang}` as keyof Transfer] || transfer.route_ru
+              const route = (transfer[`route_${lang}` as keyof Transfer] as string) || transfer.route_ru
               const description = transfer[`description_${lang}` as keyof Transfer] || transfer.description_ru
 
               return (
-                <div key={transfer.id} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                <div key={transfer.id} className="bg-white rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300 flex flex-col group">
                   
-                  {/* Заголовок карточки с ценой */}
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="text-xl font-bold text-gray-900 leading-tight pr-4">{route}</h3>
-                    <div className="bg-green-50 text-green-700 font-bold px-3 py-1 rounded-lg whitespace-nowrap">
+                  {/* Изображение маршрута/авто */}
+                  <div className="h-52 w-full relative overflow-hidden bg-gray-100">
+                    {transfer.image_url ? (
+                      <img 
+                        src={transfer.image_url} 
+                        alt={route} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400">Нет фото</div>
+                    )}
+                    
+                    {/* Цена (Glassmorphism) */}
+                    <div className="absolute bottom-4 right-4 bg-green-600/90 backdrop-blur-md text-white font-bold text-sm px-4 py-1.5 rounded-xl shadow-sm">
                       ${transfer.price}
                     </div>
                   </div>
-                  
-                  {/* Описание */}
-                  <p className="text-gray-600 mb-6 flex-grow">{description}</p>
-                  
-                  {/* Подвал с характеристиками */}
-                  <div className="flex gap-3 mt-auto pt-4 border-t border-gray-100">
-                    <span className="text-sm font-medium text-gray-600 bg-gray-100 px-3 py-1 rounded-md flex items-center">
-                      🚗 {transfer.car_class}
-                    </span>
-                    <span className="text-sm font-medium text-gray-600 bg-gray-100 px-3 py-1 rounded-md flex items-center">
-                      👥 до {transfer.passengers_limit} чел.
-                    </span>
+
+                  {/* Контент */}
+                  <div className="p-6 flex flex-col flex-grow">
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight">{route}</h3>
+                    <p className="text-gray-600 mb-6 flex-grow text-sm leading-relaxed">{description}</p>
+                    
+                    {/* Характеристики */}
+                    <div className="flex gap-2 mt-auto pt-4 border-t border-gray-100">
+                      <span className="text-xs font-semibold text-gray-600 bg-gray-100 px-3 py-1.5 rounded-lg">
+                        🚗 {transfer.car_class}
+                      </span>
+                      <span className="text-xs font-semibold text-gray-600 bg-gray-100 px-3 py-1.5 rounded-lg">
+                        👥 до {transfer.passengers_limit} чел.
+                      </span>
+                    </div>
                   </div>
+
                 </div>
               )
             })}
