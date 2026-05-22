@@ -22,8 +22,8 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Указываем, на каких путях должен срабатывать этот код (игнорируем системные файлы Next.js)
   matcher: [
-    '/((?!_next|public|api|favicon.ico).*)',
-  ],
+    // Игнорируем api, системные пути Next.js, картинки, фавиконки и видео .mp4
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.mp4$).*)'
+  ]
 }
