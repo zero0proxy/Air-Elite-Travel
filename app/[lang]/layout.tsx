@@ -4,7 +4,6 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "../globals.css";
 
-// Фиксируем масштаб для мобильных устройств, чтобы интерфейс не ломался при зуме
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -30,13 +29,13 @@ export default async function RootLayout({
   return (
     <html lang={lang}>
       <body className="antialiased flex flex-col min-h-screen">
-        {/* Шапка теперь глобальная */}
         <Header lang={lang} />
         
-        {/* Основной контент страниц */}
         <div className="flex-grow">
           {children}
         </div>
+
+        <Footer lang={lang} />
       </body>
     </html>
   );
