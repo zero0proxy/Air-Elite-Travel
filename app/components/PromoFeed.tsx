@@ -1,6 +1,8 @@
 import { supabase } from '../../lib/supabase'
 import { Locale } from '../../dictionaries/getDictionary'
 
+export const dynamic = 'force-dynamic';
+
 type Promotion = {
   id: string
   partner_name: string
@@ -11,13 +13,10 @@ type Promotion = {
   title_uz: string | null
   discount_value: string | null
   available_slots: number | null
+  image_url: string | null // <-- Добавили новое поле из базы
 }
 
-// Эта строчка отключает кэширование Next.js, заставляя его всегда брать свежие данные
-export const dynamic = 'force-dynamic';
-
 export default async function PromoFeed({ lang }: { lang: Locale }) {
-  // Временно убрали фильтры по дате, запрашиваем вообще всё, что есть
   const { data: promotions, error } = await supabase
     .from('promotions')
     .select('*')
@@ -27,39 +26,58 @@ export default async function PromoFeed({ lang }: { lang: Locale }) {
     return <div className="text-red-500 text-center py-10">Ошибка БД: {error.message}</div>
   }
 
-  // Если данных нет, мы выведем этот текст, а не пустой экран
-  if (!promotions || promotions.length === 0) {
-    return (
-      <div className="w-full max-w-6xl mx-auto py-12 px-4 text-center">
-        <p className="text-xl text-gray-500">Компонент работает, но акций в базе пока нет (или они не прошли фильтр).</p>
-      </div>
-    )
-  }
+  if (!promotions || promotions.length === 0) return null
 
   return (
-    <div className="w-full max-w-6xl mx-auto py-12 px-4">
-      <h2 className="text-3xl font-bold text-gray-900 mb-8">Горящие предложения</h2>
+    <div className="w-full max-w-6xl mx-auto px-4">
+      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-10 tracking-tight">
+        Горящие предложения
+      </h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {promotions.map((promo: Promotion) => {
           const title = promo[`title_${lang}` as keyof Promotion] || promo.title_ru
 
           return (
-            <div key={promo.id} className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
-              {promo.discount_value && (
-                <div className="absolute top-4 right-4 bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-full">
-                  {promo.discount_value}
-                </div>
-              )}
+            <div 
+              key={promo.id} 
+              className="bg-white rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300 flex flex-col group cursor-pointer"
+            >
+              {/* Блок с фотографией */}
+              <div className="h-60 w-full relative overflow-hidden bg-gray-100">
+                {promo.image_url ? (
+                  <img 
+                    src={promo.image_url} 
+                    alt={title} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400">Нет фото</div>
+                )}
+                
+                {/* Бейджик со скидкой (Glassmorphism) */}
+                {promo.discount_value && (
+                  <div className="absolute top-4 right-4 bg-red-600/90 backdrop-blur-md text-white text-sm font-bold px-4 py-2 rounded-2xl shadow-lg">
+                    {promo.discount_value}
+                  </div>
+                )}
+              </div>
               
-              <div className="text-sm text-blue-600 font-medium mb-2">{promo.partner_name}</div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">{title}</h3>
-              
-              {promo.type === 'event' && promo.available_slots && (
-                <div className="inline-flex items-center text-sm text-orange-600 bg-orange-50 px-3 py-1 rounded-lg">
-                  🔥 Осталось мест: {promo.available_slots}
+              {/* Текстовый контент */}
+              <div className="p-8 flex flex-col flex-grow">
+                <div className="text-sm text-blue-600 font-bold tracking-wider uppercase mb-3">
+                  {promo.partner_name}
                 </div>
-              )}
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 leading-tight">
+                  {title}
+                </h3>
+                
+                {promo.type === 'event' && promo.available_slots && (
+                  <div className="mt-auto inline-flex items-center text-sm font-medium text-orange-700 bg-orange-50 px-4 py-2 rounded-xl">
+                    🔥 Осталось мест: {promo.available_slots}
+                  </div>
+                )}
+              </div>
             </div>
           )
         })}
