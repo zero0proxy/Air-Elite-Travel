@@ -11,6 +11,18 @@
     "subtitle": "Premium tours, car rentals, and comfortable transfers for your perfect vacation",
     "cta": "Choose a tour"
   },
+  "features": {
+    "title": "Why Choose Us",
+    "f1_title": "Premium Fleet",
+    "f1_desc": "Only thoroughly checked vehicles in perfect technical condition.",
+    "f2_title": "24/7 Support",
+    "f2_desc": "Your personal manager is always in touch via any messenger.",
+    "f3_title": "Honest Prices",
+    "f3_desc": "No hidden fees. You pay exactly the amount you see."
+  },
+  "testimonials": {
+    "title": "Client Reviews"
+  },
   "footer": {
     "contacts": "Contacts",
     "rights": "All rights reserved."
