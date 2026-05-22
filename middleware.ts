@@ -23,7 +23,7 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Игнорируем api, системные пути Next.js, картинки, фавиконки и видео .mp4
+    // Игнорируем системные файлы, картинки и видео .mp4
     '/((?!api|_next/static|_next/image|favicon.ico|.*\\.mp4$).*)'
   ]
 }

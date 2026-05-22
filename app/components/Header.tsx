@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react'
 export default function Header({ lang, navDict }: { lang: string, navDict: any }) {
   const pathname = usePathname()
   const isHomePage = pathname === `/${lang}`
-
   const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
@@ -15,33 +14,30 @@ export default function Header({ lang, navDict }: { lang: string, navDict: any }
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Логика стилей: если главная страница и не проскроллили - прозрачная. Иначе - белая.
   const headerClasses = isHomePage 
-    ? `fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-4' : 'bg-gradient-to-b from-black/70 to-transparent py-6'}`
+    ? `fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-md py-4' : 'bg-gradient-to-b from-black/60 to-transparent py-6'}`
     : "sticky top-0 w-full z-50 bg-white shadow-sm py-4"
 
-  const textClasses = isHomePage && !isScrolled ? "text-white drop-shadow-md" : "text-gray-900"
-  const logoAccent = isHomePage && !isScrolled ? "text-blue-400" : "text-blue-600"
+  const textClasses = isHomePage && !isScrolled ? "text-white" : "text-gray-900"
+  const logoColor = isHomePage && !isScrolled ? "text-white" : "text-blue-600"
 
   return (
     <header className={headerClasses}>
-      <div className="max-w-7xl mx-auto px-4 md:px-8 flex justify-between items-center">
-        {/* Строгий текстовый логотип */}
-        <a href={`/${lang}`} className={`text-2xl font-black tracking-tighter transition-colors ${textClasses}`}>
-          AIR ELITE <span className={`font-light ${logoAccent}`}>TRAVEL</span>
+      <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
+        <a href={`/${lang}`} className={`text-2xl font-black tracking-tighter transition-colors ${logoColor}`}>
+          AIR ELITE <span className="font-light opacity-80">TRAVEL</span>
         </a>
 
-        {/* Навигация */}
-        <nav className="hidden md:flex gap-8">
-          <a href={`/${lang}/tours`} className={`font-medium text-sm uppercase tracking-wider transition-colors hover:text-blue-500 ${textClasses}`}>
-            {navDict?.tours}
-          </a>
-          <a href={`/${lang}/cars`} className={`font-medium text-sm uppercase tracking-wider transition-colors hover:text-blue-500 ${textClasses}`}>
-            {navDict?.cars}
-          </a>
-          <a href={`/${lang}/transfers`} className={`font-medium text-sm uppercase tracking-wider transition-colors hover:text-blue-500 ${textClasses}`}>
-            {navDict?.transfers}
-          </a>
+        <nav className="hidden md:flex gap-10">
+          {['tours', 'cars', 'transfers'].map((item) => (
+            <a 
+              key={item}
+              href={`/${lang}/${item}`} 
+              className={`font-bold text-[13px] uppercase tracking-[0.2em] transition-colors hover:text-blue-500 ${textClasses}`}
+            >
+              {navDict?.[item]}
+            </a>
+          ))}
         </nav>
       </div>
     </header>

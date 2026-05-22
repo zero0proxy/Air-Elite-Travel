@@ -33,11 +33,7 @@ export default async function RootLayout({
     <html lang={lang}>
       <body className="antialiased flex flex-col min-h-screen">
         <Header lang={lang} navDict={dict.navigation} />
-        
-        <div className="flex-grow">
-          {children}
-        </div>
-
+        <div className="flex-grow">{children}</div>
         <Footer lang={lang} />
       </body>
     </html>
