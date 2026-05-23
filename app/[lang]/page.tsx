@@ -1,9 +1,9 @@
 import { Locale } from "../../dictionaries/getDictionary";
 import Hero from "../components/Hero";
 import HotTours from "../components/HotTours";
+import BookingWidget from "../components/BookingWidget";
 import HotCars from "../components/HotCars";
 import PromoFeed from "../components/PromoFeed";
-import BookingWidget from "../components/BookingWidget";
 import AboutSection from "../components/AboutSection";
 import Testimonials from "../components/Testimonials";
 
@@ -24,15 +24,19 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       <div className="relative z-10 flex flex-col">
         <Hero lang={lang} />
         
+        {/* 1. Эмоция: Туры */}
         <HotTours lang={lang} />
-        <HotCars lang={lang} />
-        
-        {/* Акции от партнеров */}
-        <PromoFeed lang={lang} />
-        
-        {/* НОВЫЙ БЛОК: Виджет интеграции с Booking.com */}
+
+        {/* 2. Жилье: Booking.com (сразу под турами) */}
         <BookingWidget />
 
+        {/* 3. Логистика: Автопарк */}
+        <HotCars lang={lang} />
+        
+        {/* 4. Скидки */}
+        <PromoFeed lang={lang} />
+        
+        {/* 5. Доверие */}
         <AboutSection lang={lang} />
         
         <div className="bg-white/50 backdrop-blur-md border-t border-gray-200">

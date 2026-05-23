@@ -36,7 +36,7 @@ export default function BookingWidget() {
   }
 
   return (
-    <section className="py-20 relative z-10 px-6">
+    <section id="booking-widget" className="py-20 relative z-10 px-6">
       <div className="max-w-[1200px] mx-auto bg-white/40 backdrop-blur-2xl rounded-[3rem] p-10 md:p-14 border border-white/60 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)]">
         
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">

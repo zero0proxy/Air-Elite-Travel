@@ -32,8 +32,13 @@ export default function BookingButton({ serviceType, serviceTitle, basePrice = 0
 
   const totalPrice = serviceType === 'car' ? basePrice * days : serviceType === 'tour' ? basePrice * people : basePrice
 
-  // Чтобы Portal работал корректно в Next.js (SSR), ждем монтирования компонента
   useEffect(() => setMounted(true), [])
+
+  const handleReset = () => {
+    setIsOpen(false)
+    setIsSuccess(false)
+    setName(''); setPhone(''); setDays(1); setPeople(1); setHasChildren(false); setTourDate('');
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,14 +61,18 @@ export default function BookingButton({ serviceType, serviceTitle, basePrice = 0
 
     if (!error) {
       setIsSuccess(true)
-      setTimeout(() => {
-        setIsSuccess(false)
-        setIsOpen(false)
-        setName(''); setPhone(''); setDays(1); setPeople(1); setHasChildren(false); setTourDate('');
-      }, 3000)
+      // Мы убрали setTimeout! Теперь окно ждет действий пользователя.
     } else {
       alert('Ошибка при бронировании: ' + error.message)
     }
+  }
+
+  const handleCrossSellClick = () => {
+    handleReset()
+    // Небольшая задержка, чтобы React успел закрыть модалку перед скроллом
+    setTimeout(() => {
+      document.getElementById('booking-widget')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }, 150)
   }
 
   const modalContent = isOpen ? (
@@ -75,15 +84,40 @@ export default function BookingButton({ serviceType, serviceTitle, basePrice = 0
             <h3 className="text-xl font-black text-gray-900 uppercase">Оформление</h3>
             <p className="text-xs text-blue-600 font-bold truncate w-[200px]">{serviceTitle}</p>
           </div>
-          <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center text-xl font-bold transition-colors">
+          <button onClick={handleReset} className="text-gray-400 hover:bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center text-xl font-bold transition-colors">
             ✕
           </button>
         </div>
 
         <div className="p-6 overflow-y-auto">
           {isSuccess ? (
-            <div className="bg-green-50 border border-green-200 text-green-800 rounded-2xl p-6 text-center font-semibold">
-              🎉 Заявка отправлена! Мы свяжемся с вами для подтверждения.
+            <div className="flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300">
+              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-4xl mb-4">
+                🎉
+              </div>
+              <h4 className="text-2xl font-black text-gray-900 mb-2 text-center">Успешно!</h4>
+              <p className="text-gray-500 text-center mb-6">Заявка отправлена. Наш менеджер свяжется с вами для подтверждения.</p>
+
+              {/* УМНЫЙ CROSS-SELL ДЛЯ ТУРОВ */}
+              {serviceType === 'tour' && (
+                <div className="w-full bg-blue-50/50 border border-blue-100 p-5 rounded-2xl mb-4">
+                  <p className="font-bold text-gray-900 mb-1 text-center">Вопрос логистики 🏨</p>
+                  <p className="text-xs text-gray-500 mb-4 text-center">Уже выбрали, где остановитесь во время путешествия?</p>
+                  <button 
+                    onClick={handleCrossSellClick}
+                    className="w-full bg-[#003580] hover:bg-blue-800 text-white font-bold py-3 rounded-xl transition-colors shadow-md"
+                  >
+                    Подобрать отель
+                  </button>
+                </div>
+              )}
+
+              <button 
+                onClick={handleReset} 
+                className="text-gray-400 hover:text-gray-600 font-bold text-sm underline"
+              >
+                Закрыть окно
+              </button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -172,7 +206,6 @@ export default function BookingButton({ serviceType, serviceTitle, basePrice = 0
       <button onClick={() => setIsOpen(true)} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-2xl transition-colors shadow-sm">
         {buttonText}
       </button>
-      {/* Рендерим модалку в корень документа, избегая любых overflow-hidden */}
       {mounted && createPortal(modalContent, document.body)}
     </>
   )
