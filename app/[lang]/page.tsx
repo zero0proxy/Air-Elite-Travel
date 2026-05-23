@@ -11,24 +11,29 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   const lang = resolvedParams.lang as Locale;
 
   return (
-    <main className="min-h-screen bg-white flex flex-col">
-      <Hero lang={lang} />
+    // Добавили bg-slate-50 и relative для позиционирования фоновых элементов
+    <main className="relative min-h-screen flex flex-col bg-[#f8fafc] overflow-hidden">
       
-      {/* 1. Эмоция: Туры сразу после видео */}
-      <HotTours lang={lang} />
+      {/* 🔮 ПРЕМИАЛЬНЫЙ ФОН: Ambient Glow (Размытые сферы) */}
+      <div className="absolute top-[100vh] left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-blue-300/20 blur-[120px]"></div>
+        <div className="absolute top-[40%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-purple-300/15 blur-[120px]"></div>
+        <div className="absolute bottom-[10%] left-[20%] w-[60vw] h-[60vw] rounded-full bg-sky-200/20 blur-[150px]"></div>
+      </div>
 
-      {/* 2. Логистика: Автопарк (на сером фоне для визуального разрыва) */}
-      <HotCars lang={lang} />
-      
-      {/* 3. Выгода: Акции */}
-      <PromoFeed lang={lang} />
-      
-      {/* 4. Доверие: О компании и статистика */}
-      <AboutSection lang={lang} />
-      
-      {/* 5. Отзывы */}
-      <div className="bg-gray-50 border-t border-gray-100">
-        <Testimonials lang={lang} />
+      {/* Контент сайта поверх фона (z-10) */}
+      <div className="relative z-10 flex flex-col">
+        <Hero lang={lang} />
+        
+        {/* Мы уберем жесткие белые фоны внутри самих компонентов или они будут смотреться как стильные карточки поверх этого фона */}
+        <HotTours lang={lang} />
+        <HotCars lang={lang} />
+        <PromoFeed lang={lang} />
+        <AboutSection lang={lang} />
+        
+        <div className="bg-white/50 backdrop-blur-md border-t border-gray-200">
+          <Testimonials lang={lang} />
+        </div>
       </div>
     </main>
   );

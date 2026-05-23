@@ -13,12 +13,12 @@ export default async function HotTours({ lang }: { lang: Locale }) {
     .select('*')
     .eq('is_active', true)
     .order('created_at', { ascending: false })
-    .limit(8)
+    .limit(4)
 
   if (error || !tours || tours.length === 0) return null;
 
   return (
-    <section className="py-24 bg-white">
+    <section className="py-24 bg-transparent">
       <div className="max-w-[1400px] mx-auto px-6">
         
         <div className="flex justify-between items-end mb-14">

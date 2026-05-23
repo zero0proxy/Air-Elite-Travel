@@ -17,7 +17,7 @@ export default async function AboutSection({ lang }: { lang: Locale }) {
   ]
 
   return (
-    <section className="py-24 bg-white border-t border-gray-100">
+    <section className="py-24 bg-transparent border-t border-gray-100">
       <div className="max-w-[1400px] mx-auto px-6">
         
         {/* Верхняя часть: Текст О нас + Статистика */}
