@@ -1,9 +1,8 @@
 import { Locale } from "../../dictionaries/getDictionary";
 import Hero from "../components/Hero";
-import Features from "../components/Features";
 import HotCars from "../components/HotCars";
 import PromoFeed from "../components/PromoFeed";
-import Stats from "../components/Stats";
+import AboutSection from "../components/AboutSection";
 import Testimonials from "../components/Testimonials";
 
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
@@ -12,20 +11,19 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
   return (
     <main className="min-h-screen bg-white flex flex-col">
-      {/* 1. Эмоция: Видео на весь экран */}
+      {/* 1. Эмоциональный захват: Чистое видео без лишних блоков */}
       <Hero lang={lang} />
       
-      {/* 2. Умный блок преимуществ (теперь он висит поверх видео и не занимает лишний скролл) */}
-      <Features lang={lang} />
-
-      {/* 3. Главный конверсионный блок сразу на втором экране */}
+      {/* 2. Сразу показываем товар лицом */}
       <HotCars lang={lang} />
       
-      {/* 4. Горящие предложения */}
+      {/* 3. Горящие акции от партнеров */}
       <PromoFeed lang={lang} />
       
-      {/* 5. Доверие и социальные доказательства */}
-      <Stats /> 
+      {/* 4. Массивный блок доверия: О нас + Статистика + Преимущества */}
+      <AboutSection lang={lang} />
+      
+      {/* 5. Отзывы */}
       <div className="bg-gray-50 border-t border-gray-100">
         <Testimonials lang={lang} />
       </div>
