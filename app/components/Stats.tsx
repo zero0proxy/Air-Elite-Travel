@@ -25,29 +25,3 @@ export default function Stats() {
     </section>
   )
 }
-
-### 2. Обновляем Главную (app/[lang]/page.tsx)
-Вставь блок статистики сразу после преимуществ, чтобы убить белое пространство:
-
-```tsx
-// ... (другие импорты)
-import Stats from "../components/Stats";
-
-export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
-  // ... (логика params)
-  return (
-    <main className="min-h-screen bg-white flex flex-col">
-      <Hero lang={lang} />
-      <Features lang={lang} />
-      
-      {/* НОВЫЙ БЛОК ДЛЯ ПЛОТНОСТИ */}
-      <Stats /> 
-
-      <HotCars lang={lang} />
-      <PromoFeed lang={lang} />
-      <Testimonials lang={lang} />
-    </main>
-  );
-}
-
-Сохраняй, пушь и смотри на результат. Теперь сайт будет выглядеть максимально солидно!
