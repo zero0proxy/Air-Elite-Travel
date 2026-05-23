@@ -12,7 +12,7 @@ export default async function HotCars({ lang }: { lang: Locale }) {
     .select('*')
     .eq('is_active', true)
     .order('created_at', { ascending: false })
-    .limit(8)
+    .limit(4)
 
   if (error || !cars || cars.length === 0) return null;
 
