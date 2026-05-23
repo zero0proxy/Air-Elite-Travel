@@ -4,33 +4,20 @@ import BookingButton from './BookingButton'
 
 export const dynamic = 'force-dynamic';
 
-type Car = {
-  id: string
-  brand: string
-  model: string
-  year: number
-  price_per_day: number
-  transmission: string
-  seats: number
-  image_url: string | null
-}
-
 export default async function HotCars({ lang }: { lang: Locale }) {
   const dict = await getDictionary(lang)
 
-  // Берем до 8 автомобилей для создания плотной витрины
   const { data: cars, error } = await supabase
     .from('cars')
     .select('*')
     .eq('is_active', true)
     .order('created_at', { ascending: false })
-    .limit(4)
+    .limit(8)
 
   if (error || !cars || cars.length === 0) return null;
 
   return (
     <section className="py-24 bg-gray-50 border-y border-gray-100">
-      {/* Расширенный контейнер для максимального заполнения экрана */}
       <div className="max-w-[1400px] mx-auto px-6">
         
         <div className="flex justify-between items-end mb-14">
@@ -38,29 +25,23 @@ export default async function HotCars({ lang }: { lang: Locale }) {
             <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter mb-4 uppercase">
               Премиум Автопарк
             </h2>
-            <div className="w-24 h-1.5 bg-blue-600 rounded-full"></div>
+            <div className="w-24 h-1.5 bg-gray-900 rounded-full"></div>
           </div>
-          <a href={`/${lang}/cars`} className="hidden md:flex group text-blue-600 font-bold items-center gap-2 text-lg">
+          <a href={`/${lang}/cars`} className="hidden md:flex group text-gray-900 font-bold items-center gap-2 text-lg">
             Смотреть все <span className="group-hover:translate-x-1 transition-transform">→</span>
           </a>
         </div>
 
-        {/* Плотная сетка: 4 колонки на больших экранах */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {cars.map((car: Car) => {
+          {cars.map((car) => {
             const fullName = `${car.brand} ${car.model}`
 
             return (
               <div key={car.id} className="bg-white rounded-[2rem] overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_10px_40px_rgb(0,0,0,0.08)] transition-all duration-500 border border-gray-100 group flex flex-col">
-                
                 <a href={`/${lang}/cars`} className="block">
                   <div className="h-56 w-full relative overflow-hidden bg-gray-100 cursor-pointer">
                     {car.image_url ? (
-                      <img 
-                        src={car.image_url} 
-                        alt={fullName} 
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                      />
+                      <img src={car.image_url} alt={fullName} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-400">Нет фото</div>
                     )}
@@ -77,18 +58,16 @@ export default async function HotCars({ lang }: { lang: Locale }) {
                   </div>
                   
                   <div className="mt-auto pt-4 border-t border-gray-50 flex flex-col gap-3">
-                    <div className="flex gap-2">
-                      <span className="text-xs font-semibold text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
-                        ⚙️ {car.transmission}
-                      </span>
-                      <span className="text-xs font-semibold text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
-                        👤 {car.seats}
-                      </span>
+                    <div className="flex gap-2 mb-2">
+                      <span className="text-xs font-semibold text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">⚙️ {car.transmission}</span>
+                      <span className="text-xs font-semibold text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">👤 {car.seats}</span>
                     </div>
 
+                    {/* ПЕРЕДАЕМ БАЗОВУЮ ЦЕНУ */}
                     <BookingButton 
                       serviceType="car" 
                       serviceTitle={fullName} 
+                      basePrice={car.price_per_day}
                     />
                   </div>
                 </div>
@@ -97,11 +76,6 @@ export default async function HotCars({ lang }: { lang: Locale }) {
             )
           })}
         </div>
-        
-        {/* Кнопка "Смотреть все" для мобильных */}
-        <a href={`/${lang}/cars`} className="md:hidden mt-8 flex justify-center w-full bg-blue-50 text-blue-600 font-bold py-4 rounded-2xl">
-          Смотреть все автомобили →
-        </a>
       </div>
     </section>
   )
