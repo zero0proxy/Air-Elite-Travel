@@ -191,7 +191,7 @@ export default function TransfersPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Ваше имя"
-                    className="bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-base font-medium outline-none focus:ring-2 focus:ring-blue-600 transition-all"
+                    className="bg-white border border-gray-200 text-gray-900 placeholder-gray-400 shadow-sm rounded-2xl px-5 py-4 text-base font-medium outline-none focus:ring-2 focus:ring-blue-600 transition-all"
                   />
                   <input 
                     type="tel" 
@@ -199,7 +199,7 @@ export default function TransfersPage() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="Номер телефона"
-                    className="bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-base font-medium outline-none focus:ring-2 focus:ring-blue-600 transition-all"
+                    className="bg-white border border-gray-200 text-gray-900 placeholder-gray-400 shadow-sm rounded-2xl px-5 py-4 text-base font-medium outline-none focus:ring-2 focus:ring-blue-600 transition-all"
                   />
                   <button
                     type="submit"
